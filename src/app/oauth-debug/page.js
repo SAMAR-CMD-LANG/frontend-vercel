@@ -16,13 +16,24 @@ export default function OAuthDebugPage() {
             const token = getStoredToken()
             const apiUrl = getApiBaseUrl()
 
+            // Test token validation
+            let tokenValidation = null
+            if (token) {
+                const validateResponse = await fetch(`${apiUrl}/debug/validate-token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                })
+                tokenValidation = validateResponse.ok ? await validateResponse.json() : { error: 'Validation failed' }
+            }
+
             // Test /auth/me endpoint
             const authResponse = await fetch(`${apiUrl}/auth/me`, {
                 credentials: 'include',
                 headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
-            const authData = authResponse.ok ? await authResponse.json() : { error: 'Auth failed' }
+            const authData = authResponse.ok ? await authResponse.json() : { error: 'Auth failed', status: authResponse.status }
 
             // Test debug endpoint
             const debugResponse = await fetch(`${apiUrl}/debug/cookies`, {
@@ -35,6 +46,7 @@ export default function OAuthDebugPage() {
             setDebugInfo({
                 token: token ? 'Present' : 'Missing',
                 tokenLength: token ? token.length : 0,
+                tokenValidation,
                 apiUrl,
                 authStatus: authResponse.status,
                 authData,
@@ -103,6 +115,12 @@ export default function OAuthDebugPage() {
                         >
                             Go to Login
                         </a>
+                        <button
+                            onClick={() => window.location.href = `${getApiBaseUrl()}/auth/google`}
+                            className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded"
+                        >
+                            Test Google OAuth
+                        </button>
                     </div>
                 </div>
             </div>

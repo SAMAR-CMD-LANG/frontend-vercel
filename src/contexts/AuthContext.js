@@ -28,21 +28,28 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
+            console.log('AuthContext checkAuth - starting auth check')
+
             // Add a small delay to ensure token is available after OAuth redirect
             await new Promise(resolve => setTimeout(resolve, 100))
+
+            // Check if token exists before making request
+            const { getStoredToken } = await import('../lib/api')
+            const token = getStoredToken()
+            console.log('AuthContext checkAuth - token available:', token ? 'Yes' : 'No')
 
             const { data } = await authAPI.me()
             if (data.user) {
                 setUser(data.user)
                 setIsAuthenticated(true)
-                console.log('Auth check successful:', data.user.email)
+                console.log('AuthContext checkAuth - success:', data.user.email)
             } else {
                 setUser(null)
                 setIsAuthenticated(false)
-                console.log('Auth check failed: no user data')
+                console.log('AuthContext checkAuth - failed: no user data')
             }
         } catch (error) {
-            console.error('Auth check failed:', error)
+            console.error('AuthContext checkAuth - error:', error)
             setUser(null)
             setIsAuthenticated(false)
         } finally {
