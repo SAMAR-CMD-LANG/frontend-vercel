@@ -22,13 +22,18 @@ export default function OAuthTestPage() {
             const envResponse = await fetch(`${apiUrl}/debug/env`)
             const envData = await envResponse.json()
 
+            // Test OAuth configuration
+            const oauthConfigResponse = await fetch(`${apiUrl}/debug/oauth-config`)
+            const oauthConfigData = await oauthConfigResponse.json()
+
             setTestResults({
                 apiUrl,
                 health: healthData,
                 callbackTest: callbackTestData,
                 environment: envData,
+                oauthConfig: oauthConfigData,
                 googleOAuthUrl: `${apiUrl}/auth/google`,
-                expectedCallbackUrl: `${envData.backendUrl}/auth/google/callback`,
+                expectedCallbackUrl: `${oauthConfigData.callbackUrl}`,
                 timestamp: new Date().toISOString()
             })
         } catch (error) {
@@ -103,6 +108,15 @@ export default function OAuthTestPage() {
                                 <code className="block mt-2 p-2 bg-gray-700 rounded text-green-400">
                                     https://backend-render-vhvf.onrender.com/auth/google/callback
                                 </code>
+                                <div className="mt-3 text-sm">
+                                    <p className="text-red-400 font-semibold">Common Issues:</p>
+                                    <ul className="list-disc list-inside mt-1 space-y-1">
+                                        <li>Redirect URI must match EXACTLY (including https://)</li>
+                                        <li>No trailing slash in the URL</li>
+                                        <li>OAuth app must be published (not in testing mode for external users)</li>
+                                        <li>Authorized domains must include your frontend domain</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
