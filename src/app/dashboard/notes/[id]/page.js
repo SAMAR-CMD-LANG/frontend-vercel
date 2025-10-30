@@ -40,8 +40,10 @@ export default function NotePage() {
 
     const fetchNote = async () => {
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/notes/${noteId}`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {
@@ -93,10 +95,12 @@ export default function NotePage() {
         if (!note || !formData.title.trim() || !formData.content.trim()) return
 
         try {
+            const token = localStorage.getItem('auth_token')
             await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/notes/${note.id}/autosave`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
                 },
                 credentials: 'include',
                 body: JSON.stringify({
@@ -125,10 +129,12 @@ export default function NotePage() {
 
             const method = noteId === 'new' ? 'POST' : 'PUT'
 
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
                 },
                 credentials: 'include',
                 body: JSON.stringify(formData),
@@ -164,9 +170,11 @@ export default function NotePage() {
         }
 
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/notes/${note.id}`, {
                 method: 'DELETE',
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {

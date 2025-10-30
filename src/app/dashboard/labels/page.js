@@ -20,8 +20,10 @@ export default function LabelsPage() {
 
     const checkAuth = async () => {
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/auth/me`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {
@@ -38,8 +40,10 @@ export default function LabelsPage() {
 
     const checkFeatures = async () => {
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/features`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {
