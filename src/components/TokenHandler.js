@@ -1,32 +1,25 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { setStoredToken } from '../lib/api'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function TokenHandler() {
-    const router = useRouter()
-    const searchParams = useSearchParams()
     const { checkAuth } = useAuth()
 
-    // Run token check immediately when component mounts
     useEffect(() => {
-        const immediateUrlParams = new URLSearchParams(window.location.search)
-        const immediateToken = immediateUrlParams.get('token')
+        // Exact copy of the manual fix that worked
+        const urlParams = new URLSearchParams(window.location.search)
+        const token = urlParams.get('token')
 
-        if (immediateToken) {
-            console.log('TokenHandler - found token, storing and reloading!')
-            localStorage.setItem('auth_token', immediateToken)
+        if (token) {
+            console.log('TokenHandler: Processing OAuth token...')
+            localStorage.setItem('auth_token', token)
+            window.history.replaceState({}, '', '/dashboard')
 
-            // Clean URL and reload immediately
-            const cleanUrl = window.location.pathname
-            window.history.replaceState({}, '', cleanUrl)
-            window.location.reload()
+            // Trigger auth check instead of page reload
+            checkAuth()
         }
-    }, []) // Run once on mount
+    }, [checkAuth])
 
-
-
-    return null // This component doesn't render anything
+    return null
 }
