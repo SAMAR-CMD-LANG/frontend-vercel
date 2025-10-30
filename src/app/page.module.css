@@ -1,0 +1,183 @@
+/* Professional Landing Page Styles - Integrated with Design System */
+
+.page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-hero-gradient);
+  position: relative;
+}
+
+.main {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 800px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: var(--bg-elevated);
+  padding: 120px 60px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  opacity: 0.5;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 24px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.intro h1 {
+  max-width: 320px;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.intro p {
+  max-width: 440px;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  text-wrap: balance;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.intro a {
+  font-weight: 600;
+  color: var(--accent-primary);
+  transition: all var(--transition-fast);
+}
+
+.intro a:hover {
+  color: var(--accent-hover);
+}
+
+.ctas {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 440px;
+  gap: 16px;
+  font-size: 0.875rem;
+  animation: slideIn 0.8s ease-out 0.2s both;
+}
+
+.ctas a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--radius-xl);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  width: fit-content;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+a.primary {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%);
+  color: var(--text-inverse);
+  gap: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+a.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-light) 100%);
+}
+
+a.secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+a.secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 48px 24px;
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  .intro {
+    gap: 16px;
+  }
+
+  .intro h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  .ctas {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ctas a {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
