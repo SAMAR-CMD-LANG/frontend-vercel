@@ -28,13 +28,18 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
+            // Add a small delay to ensure token is available after OAuth redirect
+            await new Promise(resolve => setTimeout(resolve, 100))
+
             const { data } = await authAPI.me()
             if (data.user) {
                 setUser(data.user)
                 setIsAuthenticated(true)
+                console.log('Auth check successful:', data.user.email)
             } else {
                 setUser(null)
                 setIsAuthenticated(false)
+                console.log('Auth check failed: no user data')
             }
         } catch (error) {
             console.error('Auth check failed:', error)

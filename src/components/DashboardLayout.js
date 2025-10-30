@@ -23,19 +23,36 @@ export default function DashboardLayout({
 
     const checkAuth = async () => {
         try {
-            const { getApiBaseUrl } = await import('../lib/api')
+            const { getApiBaseUrl, getStoredToken } = await import('../lib/api')
+            const token = getStoredToken()
+
+            console.log('DashboardLayout auth check - Token available:', token ? 'Yes' : 'No')
+
+            const headers = {
+                'credentials': 'include'
+            }
+
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`
+            }
+
             const response = await fetch(`${getApiBaseUrl()}/auth/me`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
+
+            console.log('DashboardLayout auth response status:', response.status)
 
             if (response.ok) {
                 const data = await response.json()
+                console.log('DashboardLayout auth success:', data.user?.email)
                 setUser(data.user)
             } else {
+                console.log('DashboardLayout auth failed, redirecting to login')
                 router.push('/login')
             }
         } catch (error) {
-            console.error('Auth check error:', error)
+            console.error('DashboardLayout auth check error:', error)
             router.push('/login')
         } finally {
             setIsLoading(false)

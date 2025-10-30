@@ -14,6 +14,8 @@ export default function TokenHandler() {
         const token = searchParams.get('token')
 
         if (token) {
+            console.log('OAuth token received, storing and authenticating...')
+
             // Store the token from OAuth redirect
             setStoredToken(token)
 
@@ -22,8 +24,10 @@ export default function TokenHandler() {
             url.searchParams.delete('token')
             window.history.replaceState({}, '', url)
 
-            // Refresh auth state
-            checkAuth()
+            // Refresh auth state with a small delay to ensure token is stored
+            setTimeout(() => {
+                checkAuth()
+            }, 100)
         }
     }, [searchParams, checkAuth])
 
