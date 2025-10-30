@@ -36,8 +36,10 @@ export default function ProfilePage() {
 
     const checkAuth = async () => {
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/auth/me`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {
@@ -60,8 +62,10 @@ export default function ProfilePage() {
 
     const fetchStats = async () => {
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/stats`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
             if (response.ok) {
@@ -130,10 +134,12 @@ export default function ProfilePage() {
         setIsChangingPassword(true)
 
         try {
+            const token = localStorage.getItem('auth_token')
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://model-test-backend.onrender.com'}/auth/change-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
                 },
                 credentials: 'include',
                 body: JSON.stringify({
