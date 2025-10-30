@@ -73,6 +73,62 @@ export default function OAuthDebugPage() {
         checkAuthStatus()
     }
 
+    const extractTokenFromUrl = () => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const token = urlParams.get('token')
+
+        if (token) {
+            console.log('MANUAL: Found token in URL:', token.substring(0, 20) + '...')
+            localStorage.setItem('auth_token', token)
+            console.log('MANUAL: Token stored in localStorage')
+            window.history.replaceState({}, '', window.location.pathname)
+            setDebugInfo({ manualTest: `Token extracted and stored! Length: ${token.length}` })
+        } else {
+            setDebugInfo({ manualTest: 'No token found in URL' })
+        }
+    }
+
+    const testStoredToken = async () => {
+        const token = localStorage.getItem('auth_token')
+
+        if (!token) {
+            setDebugInfo({ manualTest: 'No token in localStorage' })
+            return
+        }
+
+        try {
+            const apiUrl = getApiBaseUrl()
+            console.log('MANUAL: Testing token with /auth/me...')
+
+            const response = await fetch(`${apiUrl}/auth/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            console.log('MANUAL: Response status:', response.status)
+
+            if (response.ok) {
+                const data = await response.json()
+                console.log('MANUAL: Auth successful!', data)
+                setDebugInfo({
+                    manualTest: `🎉 AUTH SUCCESS! User: ${data.user.email}`,
+                    authResult: data
+                })
+            } else {
+                const errorData = await response.text()
+                console.log('MANUAL: Auth failed:', errorData)
+                setDebugInfo({
+                    manualTest: `❌ Auth failed: ${response.status} - ${errorData}`
+                })
+            }
+        } catch (error) {
+            console.log('MANUAL: Request error:', error)
+            setDebugInfo({ manualTest: `❌ Request error: ${error.message}` })
+        }
+    }
+
     if (loading) {
         return <div className="p-8">Loading debug info...</div>
     }
@@ -122,8 +178,30 @@ export default function OAuthDebugPage() {
                             Test Google OAuth
                         </button>
                     </div>
+
+                    <div className="mt-6 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded">
+                        <h3 className="font-semibold text-yellow-400 mb-4">Manual Token Testing</h3>
+                        <div className="flex gap-2 flex-wrap">
+                            <button
+                                onClick={extractTokenFromUrl}
+                                className="bg-orange-600 hover:bg-orange-700 px-3 py-2 rounded text-sm"
+                            >
+                                Extract Token from URL
+                            </button>
+                            <button
+                                onClick={testStoredToken}
+                                className="bg-green-600 hover:bg-green-700 px-3 py-2 rounded text-sm"
+                            >
+                                Test Stored Token
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">
+                            After Google OAuth, come back here and click "Extract Token from URL", then "Test Stored Token"
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+        </div >
     )
 }
