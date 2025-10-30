@@ -26,11 +26,8 @@ export default function DashboardPage() {
         // Only fetch if authenticated - let AuthContext handle redirects
         if (isAuthenticated) {
             fetchNotes()
-        } else if (!authLoading && !isAuthenticated) {
-            // If auth is done loading and user is not authenticated, redirect
-            router.push('/login')
         }
-    }, [searchQuery, sortBy, sortOrder, currentPage, isAuthenticated, authLoading, router])
+    }, [searchQuery, sortBy, sortOrder, currentPage, isAuthenticated])
 
     const fetchNotes = async () => {
         try {
