@@ -23,9 +23,13 @@ export default function TokenHandler() {
             const cleanUrl = window.location.pathname
             window.history.replaceState({}, '', cleanUrl)
 
-            // Force a page reload to trigger auth check with the new token
-            console.log('IMMEDIATE TokenHandler - reloading page to apply auth')
-            window.location.reload()
+            // Trigger auth check without reload
+            console.log('IMMEDIATE TokenHandler - triggering auth check')
+            setTimeout(() => {
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new Event('oauth-success'))
+                }
+            }, 100)
         }
     }
 
@@ -47,9 +51,11 @@ export default function TokenHandler() {
             window.history.replaceState({}, '', url)
             console.log('TokenHandler - token removed from URL')
 
-            // Reload page to ensure auth state is updated
-            console.log('TokenHandler - reloading page to apply auth')
-            window.location.reload()
+            // Trigger auth check without reload
+            console.log('TokenHandler - triggering auth check')
+            setTimeout(() => {
+                checkAuth()
+            }, 100)
         }
     }, []) // Remove dependencies to run immediately on mount
 
