@@ -23,25 +23,14 @@ export default function DashboardPage() {
     const router = useRouter()
 
     useEffect(() => {
-        if (!requireAuth()) return
-
-        // Add small delay to ensure token is available after OAuth
-        const timer = setTimeout(() => {
+        // Only fetch if authenticated - let AuthContext handle redirects
+        if (isAuthenticated) {
             fetchNotes()
-        }, 100)
-
-        return () => clearTimeout(timer)
+        }
     }, [searchQuery, sortBy, sortOrder, currentPage, isAuthenticated])
 
     const fetchNotes = async () => {
         try {
-            // Check if token exists before making request
-            const token = localStorage.getItem('auth_token')
-            if (!token) {
-                console.log('No token available, skipping fetch')
-                return
-            }
-
             const params = {
                 page: currentPage,
                 limit: 10,
