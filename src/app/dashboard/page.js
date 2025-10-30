@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import Icons from '../../components/Icons'
 import ThemeToggle from '../../components/ThemeToggle'
-// TokenHandler removed - using dedicated /auth/success page
+import TokenHandler from '../../components/TokenHandler'
 import { useAuth } from '../../contexts/AuthContext'
 import { notesAPI } from '../../lib/api'
 
@@ -80,7 +80,7 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen">
-            {/* TokenHandler removed - using dedicated /auth/success page */}
+            <TokenHandler />
             {/* Mobile Sidebar Overlay */}
             {sidebarOpen && (
                 <div

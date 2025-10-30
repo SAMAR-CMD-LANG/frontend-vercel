@@ -11,35 +11,35 @@ export default function TokenHandler() {
     const { checkAuth } = useAuth()
 
     useEffect(() => {
-        console.log('TokenHandler: Checking for token in URL...')
+        console.log('=== SIMPLIFIED TokenHandler ===')
         const token = searchParams.get('token')
-        console.log('TokenHandler: Token found:', token ? 'Yes' : 'No')
-        console.log('TokenHandler: Token length:', token ? token.length : 0)
+        console.log('Token in URL:', token ? 'YES' : 'NO')
+        console.log('Token length:', token ? token.length : 0)
 
         if (token) {
-            console.log('TokenHandler: Processing OAuth token...')
+            console.log('STORING TOKEN IN LOCALSTORAGE...')
 
             // Store the token from OAuth redirect
             setStoredToken(token)
-            console.log('TokenHandler: Token stored in localStorage')
 
-            // Verify storage
-            const storedToken = localStorage.getItem('auth_token')
-            console.log('TokenHandler: Verification - token stored successfully:', !!storedToken)
+            // Verify it was stored
+            const stored = localStorage.getItem('auth_token')
+            console.log('Token stored successfully:', !!stored)
+            console.log('Stored token length:', stored ? stored.length : 0)
 
             // Remove token from URL
             const url = new URL(window.location)
             url.searchParams.delete('token')
             window.history.replaceState({}, '', url)
-            console.log('TokenHandler: Token removed from URL')
+            console.log('Token removed from URL')
 
-            // Refresh auth state with a small delay to ensure token is stored
+            // Refresh auth state
             setTimeout(() => {
-                console.log('TokenHandler: Calling checkAuth...')
+                console.log('Calling checkAuth after token storage...')
                 checkAuth()
             }, 200)
         } else {
-            console.log('TokenHandler: No token in URL, skipping...')
+            console.log('No token in URL parameters')
         }
     }, [searchParams, checkAuth])
 

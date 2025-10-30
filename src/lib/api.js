@@ -20,7 +20,9 @@ const API_BASE_URL = getApiBaseUrl()
 // Token storage utilities
 const getStoredToken = () => {
     if (typeof window !== 'undefined') {
-        return localStorage.getItem('auth_token')
+        const token = localStorage.getItem('auth_token')
+        console.log('SIMPLIFIED getStoredToken - token:', token ? 'Present' : 'Missing')
+        return token
     }
     return null
 }
