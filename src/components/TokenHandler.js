@@ -15,7 +15,7 @@ export default function TokenHandler() {
         const immediateUrlParams = new URLSearchParams(window.location.search)
         const immediateToken = immediateUrlParams.get('token')
 
-        if (immediateToken && !localStorage.getItem('auth_token')) {
+        if (immediateToken) {
             console.log('IMMEDIATE TokenHandler - found token, storing now!')
             localStorage.setItem('auth_token', immediateToken)
 
