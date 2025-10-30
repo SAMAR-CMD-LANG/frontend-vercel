@@ -16,41 +16,19 @@ export default function OAuthDebugPage() {
             const token = getStoredToken()
             const apiUrl = getApiBaseUrl()
 
-            // Test token validation
-            let tokenValidation = null
-            if (token) {
-                const validateResponse = await fetch(`${apiUrl}/debug/validate-token`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                })
-                tokenValidation = validateResponse.ok ? await validateResponse.json() : { error: 'Validation failed' }
-            }
-
-            // Test /auth/me endpoint
             const authResponse = await fetch(`${apiUrl}/auth/me`, {
                 credentials: 'include',
                 headers: token ? { 'Authorization': `Bearer ${token}` } : {}
             })
 
-            const authData = authResponse.ok ? await authResponse.json() : { error: 'Auth failed', status: authResponse.status }
-
-            // Test debug endpoint
-            const debugResponse = await fetch(`${apiUrl}/debug/cookies`, {
-                credentials: 'include',
-                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-            })
-
-            const debugData = debugResponse.ok ? await debugResponse.json() : { error: 'Debug failed' }
+            const authData = authResponse.ok ? await authResponse.json() : { error: 'Auth failed' }
 
             setDebugInfo({
                 token: token ? 'Present' : 'Missing',
                 tokenLength: token ? token.length : 0,
-                tokenValidation,
                 apiUrl,
                 authStatus: authResponse.status,
                 authData,
-                debugData,
                 localStorage: typeof window !== 'undefined' ? {
                     authToken: localStorage.getItem('auth_token') ? 'Present' : 'Missing'
                 } : {},
@@ -66,9 +44,6 @@ export default function OAuthDebugPage() {
     const clearAuth = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('auth_token')
-            // Clear cookies
-            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-            document.cookie = 'token_client=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
         }
         checkAuthStatus()
     }
@@ -113,19 +88,19 @@ export default function OAuthDebugPage() {
                 const data = await response.json()
                 console.log('MANUAL: Auth successful!', data)
                 setDebugInfo({
-                    manualTest: `🎉 AUTH SUCCESS! User: ${data.user.email}`,
+                    manualTest: `SUCCESS! User: ${data.user.email}`,
                     authResult: data
                 })
             } else {
                 const errorData = await response.text()
                 console.log('MANUAL: Auth failed:', errorData)
                 setDebugInfo({
-                    manualTest: `❌ Auth failed: ${response.status} - ${errorData}`
+                    manualTest: `Auth failed: ${response.status} - ${errorData}`
                 })
             }
         } catch (error) {
             console.log('MANUAL: Request error:', error)
-            setDebugInfo({ manualTest: `❌ Request error: ${error.message}` })
+            setDebugInfo({ manualTest: `Request error: ${error.message}` })
         }
     }
 
@@ -146,7 +121,7 @@ export default function OAuthDebugPage() {
                         </pre>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                         <button
                             onClick={checkAuthStatus}
                             className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
@@ -159,18 +134,6 @@ export default function OAuthDebugPage() {
                         >
                             Clear Auth Data
                         </button>
-                        <a
-                            href="/dashboard"
-                            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded inline-block"
-                        >
-                            Go to Dashboard
-                        </a>
-                        <a
-                            href="/login"
-                            className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded inline-block"
-                        >
-                            Go to Login
-                        </a>
                         <button
                             onClick={() => window.location.href = `${getApiBaseUrl()}/auth/google`}
                             className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded"
@@ -179,9 +142,9 @@ export default function OAuthDebugPage() {
                         </button>
                     </div>
 
-                    <div className="mt-6 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded">
+                    <div className="bg-yellow-900/20 border border-yellow-500/30 rounded p-4">
                         <h3 className="font-semibold text-yellow-400 mb-4">Manual Token Testing</h3>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-2 flex-wrap mb-2">
                             <button
                                 onClick={extractTokenFromUrl}
                                 className="bg-orange-600 hover:bg-orange-700 px-3 py-2 rounded text-sm"
@@ -195,13 +158,21 @@ export default function OAuthDebugPage() {
                                 Test Stored Token
                             </button>
                         </div>
-                        <p className="text-xs text-gray-400 mt-2">
-                            After Google OAuth, come back here and click "Extract Token from URL", then "Test Stored Token"
+                        <p className="text-xs text-gray-400">
+                            After Google OAuth, come back here and click Extract Token from URL, then Test Stored Token
                         </p>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <a href="/dashboard" className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded inline-block">
+                            Go to Dashboard
+                        </a>
+                        <a href="/login" className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded inline-block">
+                            Go to Login
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        </div >
     )
 }
