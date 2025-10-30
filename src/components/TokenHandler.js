@@ -10,38 +10,46 @@ export default function TokenHandler() {
     const searchParams = useSearchParams()
     const { checkAuth } = useAuth()
 
+    // IMMEDIATE token check - run before anything else
+    if (typeof window !== 'undefined') {
+        const immediateUrlParams = new URLSearchParams(window.location.search)
+        const immediateToken = immediateUrlParams.get('token')
+
+        if (immediateToken && !localStorage.getItem('auth_token')) {
+            console.log('IMMEDIATE TokenHandler - found token, storing now!')
+            localStorage.setItem('auth_token', immediateToken)
+
+            // Clean URL immediately
+            const cleanUrl = window.location.pathname
+            window.history.replaceState({}, '', cleanUrl)
+        }
+    }
+
     useEffect(() => {
-        console.log('=== SIMPLIFIED TokenHandler ===')
-        const token = searchParams.get('token')
-        console.log('Token in URL:', token ? 'YES' : 'NO')
-        console.log('Token length:', token ? token.length : 0)
+        // Check URL immediately on mount, before anything else can clean it
+        const urlParams = new URLSearchParams(window.location.search)
+        const token = urlParams.get('token')
+
+        console.log('TokenHandler - checking URL:', window.location.href)
+        console.log('TokenHandler - token found:', token ? 'YES' : 'NO')
 
         if (token) {
-            console.log('STORING TOKEN IN LOCALSTORAGE...')
-
-            // Store the token from OAuth redirect
+            console.log('TokenHandler - storing token immediately')
             setStoredToken(token)
 
-            // Verify it was stored
-            const stored = localStorage.getItem('auth_token')
-            console.log('Token stored successfully:', !!stored)
-            console.log('Stored token length:', stored ? stored.length : 0)
-
-            // Remove token from URL
+            // Remove token from URL immediately
             const url = new URL(window.location)
             url.searchParams.delete('token')
             window.history.replaceState({}, '', url)
-            console.log('Token removed from URL')
+            console.log('TokenHandler - token removed from URL')
 
             // Refresh auth state
             setTimeout(() => {
-                console.log('Calling checkAuth after token storage...')
+                console.log('TokenHandler - calling checkAuth')
                 checkAuth()
-            }, 200)
-        } else {
-            console.log('No token in URL parameters')
+            }, 100)
         }
-    }, [searchParams, checkAuth])
+    }, []) // Remove dependencies to run immediately on mount
 
     return null // This component doesn't render anything
 }
