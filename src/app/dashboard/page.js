@@ -19,15 +19,18 @@ export default function DashboardPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const { user, isAuthenticated, requireAuth, logout } = useAuth()
+    const { user, isAuthenticated, isLoading: authLoading, requireAuth, logout } = useAuth()
     const router = useRouter()
 
     useEffect(() => {
         // Only fetch if authenticated - let AuthContext handle redirects
         if (isAuthenticated) {
             fetchNotes()
+        } else if (!authLoading && !isAuthenticated) {
+            // If auth is done loading and user is not authenticated, redirect
+            router.push('/login')
         }
-    }, [searchQuery, sortBy, sortOrder, currentPage, isAuthenticated])
+    }, [searchQuery, sortBy, sortOrder, currentPage, isAuthenticated, authLoading, router])
 
     const fetchNotes = async () => {
         try {
@@ -69,7 +72,7 @@ export default function DashboardPage() {
         return content.substring(0, maxLength) + '...'
     }
 
-    if (isLoading) {
+    if (authLoading || isLoading) {
         return (
             <div className="loading-container">
                 <div className="loading-content">
