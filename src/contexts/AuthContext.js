@@ -94,14 +94,18 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await authAPI.logout()
+            // Clear token from localStorage
+            const { removeStoredToken } = await import('../lib/api')
+            removeStoredToken()
+
+            // Clear local state
             setUser(null)
             setIsAuthenticated(false)
             toast.success('Logged out successfully')
             router.push('/')
         } catch (error) {
             console.error('Logout error:', error)
-            // Even if logout fails on server, clear local state
+            // Even if logout fails, clear local state
             setUser(null)
             setIsAuthenticated(false)
             router.push('/')

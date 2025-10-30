@@ -20,24 +20,7 @@ const API_BASE_URL = getApiBaseUrl()
 // Token storage utilities
 const getStoredToken = () => {
     if (typeof window !== 'undefined') {
-        // First try localStorage
-        const localToken = localStorage.getItem('auth_token')
-        console.log('getStoredToken - localStorage token:', localToken ? 'Present' : 'Missing')
-        if (localToken) return localToken
-
-        // Fallback: try to read from client cookie
-        const cookies = document.cookie.split(';')
-        console.log('getStoredToken - all cookies:', cookies)
-        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('token_client='))
-        if (tokenCookie) {
-            const token = tokenCookie.split('=')[1]
-            console.log('getStoredToken - found cookie token, storing in localStorage')
-            // Store in localStorage for future use
-            localStorage.setItem('auth_token', token)
-            return token
-        }
-
-        console.log('getStoredToken - no token found anywhere')
+        return localStorage.getItem('auth_token')
     }
     return null
 }
@@ -60,11 +43,9 @@ export const apiRequest = async (endpoint, options = {}) => {
     const token = getStoredToken()
 
     const defaultOptions = {
-        credentials: 'include', // Always include cookies for auth
-        mode: 'cors', // Explicitly set CORS mode
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }), // Add token header if available
+            ...(token && { 'Authorization': `Bearer ${token}` }),
             ...options.headers,
         },
     }
