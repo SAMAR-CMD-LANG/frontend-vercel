@@ -3687,7 +3687,9 @@ body.light .user-email {
   }
 }
 
-/ * Additional responsive fixes for dashboard */ @media (max-width: 700px) {
+/* Additional responsive fixes for dashboard */
+@media (max-width: 700px) {
+
   /* Ensure hamburger menu is always visible */
   .lg\:hidden {
     display: flex !important;
