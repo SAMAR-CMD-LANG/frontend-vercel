@@ -168,65 +168,43 @@ export default function DashboardPage() {
 
             {/* Main Content */}
             <div className="lg:ml-64 xl:ml-72">
-                {/* Professional Header */}
-                <header className="nav-blur px-3 sm:px-6 py-3 sm:py-4 sticky top-0 z-30">
-                    <div className="flex items-center justify-between gap-2 sm:gap-4">
-                        <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                {/* Professional Header - Fixed Responsive Layout */}
+                <header className="nav-blur px-3 sm:px-4 lg:px-6 py-3 sm:py-4 sticky top-0 z-30">
+                    {/* Main Header Row - Always Visible */}
+                    <div className="flex items-center gap-3">
+                        {/* Left Section */}
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                            {/* Hamburger Menu - Always visible below lg */}
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="lg:hidden btn btn-ghost p-2"
+                                className="lg:hidden btn btn-ghost p-2 flex-shrink-0"
                             >
                                 <Icons.Menu size={20} />
                             </button>
+
+                            {/* Title Section - Never hidden */}
                             <div className="min-w-0">
-                                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary truncate">My Notes</h1>
-                                <p className="text-muted text-xs sm:text-sm hidden sm:block">Manage your secure notes</p>
+                                <h1 className="text-base sm:text-lg lg:text-2xl font-bold text-primary">My Notes</h1>
+                                <p className="text-muted text-xs hidden sm:block">Manage your secure notes</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-shrink-0">
+                        {/* Right Section - Essential Controls */}
+                        <div className="flex items-center gap-2 flex-shrink-0">
                             <ThemeToggle />
 
-                            {/* Search - Hidden on mobile, shown on tablet+ */}
-                            <div className="search-container hidden md:block">
-                                <Icons.Search size={18} className="search-icon" />
-                                <input
-                                    type="text"
-                                    placeholder="Search notes..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="search-input"
-                                />
-                            </div>
-
-                            {/* Sort Dropdown - Responsive */}
-                            <select
-                                value={`${sortBy}-${sortOrder}`}
-                                onChange={(e) => {
-                                    const [field, order] = e.target.value.split('-')
-                                    setSortBy(field)
-                                    setSortOrder(order)
-                                }}
-                                className="form-input w-auto min-w-[120px] sm:min-w-[160px] text-xs sm:text-sm"
-                            >
-                                <option value="updated_at-desc">Recent</option>
-                                <option value="created_at-desc">Created</option>
-                                <option value="title-asc">A-Z</option>
-                                <option value="title-desc">Z-A</option>
-                            </select>
-
-                            {/* New Note Button - Responsive */}
-                            <a href="/dashboard/notes/new" className="btn btn-primary text-xs sm:text-sm px-2 sm:px-4">
-                                <Icons.Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
-                                <span className="hidden sm:inline">New Note</span>
-                                <span className="sm:hidden">New</span>
+                            {/* New Note Button - Always visible */}
+                            <a href="/dashboard/notes/new" className="btn btn-primary text-xs sm:text-sm px-3 py-2">
+                                <Icons.Plus size={16} />
+                                <span className="ml-1">New</span>
                             </a>
                         </div>
                     </div>
 
-                    {/* Mobile Search Bar */}
-                    <div className="md:hidden mt-3 pt-3 border-t border-primary/10">
-                        <div className="search-container">
+                    {/* Second Row - Search and Sort */}
+                    <div className="flex items-center gap-3 mt-3">
+                        {/* Search Bar - Full width on mobile */}
+                        <div className="search-container flex-1">
                             <Icons.Search size={18} className="search-icon" />
                             <input
                                 type="text"
@@ -236,6 +214,22 @@ export default function DashboardPage() {
                                 className="search-input"
                             />
                         </div>
+
+                        {/* Sort Dropdown - Compact */}
+                        <select
+                            value={`${sortBy}-${sortOrder}`}
+                            onChange={(e) => {
+                                const [field, order] = e.target.value.split('-')
+                                setSortBy(field)
+                                setSortOrder(order)
+                            }}
+                            className="form-input w-auto min-w-[90px] sm:min-w-[120px] text-xs sm:text-sm flex-shrink-0"
+                        >
+                            <option value="updated_at-desc">Recent</option>
+                            <option value="created_at-desc">Created</option>
+                            <option value="title-asc">A-Z</option>
+                            <option value="title-desc">Z-A</option>
+                        </select>
                     </div>
                 </header>
 
