@@ -30,10 +30,31 @@ export const AuthProvider = ({ children }) => {
         try {
             console.log('AuthContext: Starting auth check...')
 
-            // Check if token exists first
-            const token = localStorage.getItem('auth_token')
+            // EMERGENCY FIX: Check URL for token if not in localStorage
+            let token = localStorage.getItem('auth_token')
+
+            if (!token && typeof window !== 'undefined') {
+                console.log('AuthContext: No token in localStorage, checking URL...')
+                console.log('AuthContext: Current URL:', window.location.href)
+
+                // Try to extract token from URL
+                const urlParams = new URLSearchParams(window.location.search)
+                const urlToken = urlParams.get('token')
+
+                if (urlToken) {
+                    console.log('AuthContext: Found token in URL, storing it...')
+                    localStorage.setItem('auth_token', urlToken)
+                    token = urlToken
+
+                    // Clean URL
+                    window.history.replaceState({}, '', '/dashboard')
+                } else {
+                    console.log('AuthContext: No token in URL either')
+                }
+            }
+
             if (!token) {
-                console.log('AuthContext: No token found')
+                console.log('AuthContext: No token found anywhere')
                 setUser(null)
                 setIsAuthenticated(false)
                 setIsLoading(false)
