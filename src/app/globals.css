@@ -3557,3 +3557,132 @@ body.light .user-name {
 body.light .user-email {
   color: #6b7280;
 }
+
+/* Responsive Utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile-first responsive breakpoints */
+@media (min-width: 640px) {
+  .sm\:line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .sm\:line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Enhanced responsive grid for notes */
+@media (max-width: 639px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .note-card {
+    padding: 0.75rem;
+  }
+
+  .sidebar-width {
+    width: 16rem;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .notes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .sidebar-width {
+    width: 18rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .notes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .notes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1536px) {
+  .notes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile navigation improvements */
+@media (max-width: 1023px) {
+  .mobile-nav-spacing {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .mobile-header-height {
+    min-height: 4rem;
+  }
+}
+
+/* Touch-friendly button sizes on mobile */
+@media (max-width: 639px) {
+  .btn {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .btn-sm {
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Improved sidebar responsiveness */
+@media (max-width: 1023px) {
+  .sidebar-mobile {
+    width: 16rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sidebar-desktop {
+    width: 16rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sidebar-desktop {
+    width: 18rem;
+  }
+}
