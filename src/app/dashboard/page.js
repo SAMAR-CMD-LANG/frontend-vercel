@@ -169,34 +169,37 @@ export default function DashboardPage() {
             {/* Main Content */}
             <div className="lg:ml-64 xl:ml-72">
                 {/* Professional Header - Fixed Responsive Layout */}
-                <header className="nav-blur px-3 sm:px-4 lg:px-6 py-3 sm:py-4 sticky top-0 z-30">
-                    {/* Main Header Row - Always Visible */}
-                    <div className="flex items-center gap-3">
+                <header className="nav-blur dashboard-header px-3 sm:px-4 lg:px-6 py-3 sm:py-4 sticky top-0 z-30">
+                    {/* Main Header Row - Responsive Layout */}
+                    <div className="flex items-center header-gap gap-2 sm:gap-3">
                         {/* Left Section */}
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                            {/* Hamburger Menu - Always visible below lg */}
+                        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                            {/* Hamburger Menu - Compact on mobile */}
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="lg:hidden btn btn-ghost p-2 flex-shrink-0"
+                                className="lg:hidden btn btn-ghost p-1.5 sm:p-2 flex-shrink-0"
                             >
-                                <Icons.Menu size={20} />
+                                <Icons.Menu size={18} className="sm:w-5 sm:h-5" />
                             </button>
 
-                            {/* Title Section - Never hidden */}
-                            <div className="min-w-0">
-                                <h1 className="text-base sm:text-lg lg:text-2xl font-bold text-primary">My Notes</h1>
+                            {/* Title Section - Responsive sizing */}
+                            <div className="min-w-0 flex-1">
+                                <h1 className="dashboard-title header-title text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-primary">My Notes</h1>
                                 <p className="text-muted text-xs hidden sm:block">Manage your secure notes</p>
                             </div>
                         </div>
 
-                        {/* Right Section - Essential Controls */}
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                            <ThemeToggle />
+                        {/* Right Section - Compact on mobile */}
+                        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                            {/* Theme Toggle - Smaller on mobile */}
+                            <div className="scale-90 sm:scale-100">
+                                <ThemeToggle />
+                            </div>
 
-                            {/* New Note Button - Always visible */}
-                            <a href="/dashboard/notes/new" className="btn btn-primary text-xs sm:text-sm px-3 py-2">
-                                <Icons.Plus size={16} />
-                                <span className="ml-1">New</span>
+                            {/* New Note Button - Icon only on very small screens */}
+                            <a href="/dashboard/notes/new" className="btn btn-primary text-xs px-2 py-1.5 sm:px-3 sm:py-2 sm:text-sm">
+                                <Icons.Plus size={14} className="sm:w-4 sm:h-4" />
+                                <span className="ml-1 hidden xs:inline">New</span>
                             </a>
                         </div>
                     </div>

@@ -3742,3 +3742,64 @@ body.light .user-email {
     max-width: 24rem;
   }
 }
+
+/* Ex
+tra small screens (below 500px) - Fix overlap issues */
+@media (max-width: 500px) {
+
+  /* Compact header layout */
+  .dashboard-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Smaller title to prevent overlap */
+  .dashboard-title {
+    font-size: 0.875rem !important;
+    line-height: 1.25;
+  }
+
+  /* More compact buttons */
+  .btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 2rem;
+  }
+
+  /* Smaller hamburger menu */
+  .lg\:hidden {
+    padding: 0.375rem !important;
+  }
+
+  /* Ensure no text wrapping in header */
+  .header-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Reduce gaps in header */
+  .header-gap {
+    gap: 0.25rem !important;
+  }
+}
+
+/* Define xs breakpoint for very small screens */
+@media (min-width: 475px) {
+  .xs\:text-base {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .xs\:inline {
+    display: inline;
+  }
+}
+
+/* Ensure proper scaling for theme toggle */
+.scale-90 {
+  transform: scale(0.9);
+}
+
+.scale-100 {
+  transform: scale(1);
+}
