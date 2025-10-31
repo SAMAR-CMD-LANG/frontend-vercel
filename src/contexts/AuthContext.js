@@ -28,27 +28,47 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
+            console.log('AuthContext: Starting auth check...')
+
             // Check if token exists first
             const token = localStorage.getItem('auth_token')
             if (!token) {
+                console.log('AuthContext: No token found')
                 setUser(null)
                 setIsAuthenticated(false)
                 setIsLoading(false)
                 return
             }
 
+            console.log('AuthContext: Token found, validating with backend...')
+            console.log('AuthContext: Token:', token.substring(0, 20) + '...')
+
             const { data } = await authAPI.me()
+            console.log('AuthContext: Backend response:', data)
+
             if (data.user) {
+                console.log('AuthContext: User authenticated successfully:', data.user.email)
                 setUser(data.user)
                 setIsAuthenticated(true)
             } else {
+                console.log('AuthContext: No user data in response')
                 setUser(null)
                 setIsAuthenticated(false)
             }
         } catch (error) {
-            console.error('Auth check failed:', error)
+            console.error('AuthContext: Auth check failed:', error)
+            console.error('AuthContext: Error details:', {
+                message: error.message,
+                name: error.name,
+                stack: error.stack
+            })
             setUser(null)
             setIsAuthenticated(false)
+
+            // If it's a network error, show a more helpful message
+            if (error.message.includes('fetch') || error.message.includes('NetworkError')) {
+                console.error('AuthContext: Network error - backend might be unreachable')
+            }
         } finally {
             setIsLoading(false)
         }

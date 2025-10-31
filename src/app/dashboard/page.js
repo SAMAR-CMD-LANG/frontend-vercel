@@ -31,6 +31,10 @@ export default function DashboardPage() {
 
     const fetchNotes = async () => {
         try {
+            console.log('Dashboard: Starting to fetch notes...')
+            console.log('Dashboard: User authenticated:', isAuthenticated)
+            console.log('Dashboard: User data:', user)
+
             const params = {
                 page: currentPage,
                 limit: 10,
@@ -39,12 +43,15 @@ export default function DashboardPage() {
                 sortOrder
             }
 
+            console.log('Dashboard: Fetching notes with params:', params)
             const { data } = await notesAPI.getNotes(params)
+            console.log('Dashboard: Notes fetched successfully:', data)
+
             setNotes(data.notes)
             setTotalPages(data.totalPages)
         } catch (error) {
-            console.error('Fetch notes error:', error)
-            toast.error('Failed to fetch notes')
+            console.error('Dashboard: Fetch notes error:', error)
+            toast.error(`Failed to fetch notes: ${error.message}`)
         } finally {
             setIsLoading(false)
         }

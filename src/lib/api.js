@@ -11,7 +11,7 @@ export const getApiBaseUrl = () => {
         return 'http://localhost:5000'
     }
 
-    // Production fallback if environment variable is not set
+    // Production fallback - update this to match your actual Render backend URL
     return 'https://model-test-backend.onrender.com'
 }
 
@@ -42,6 +42,11 @@ export const apiRequest = async (endpoint, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`
     const token = getStoredToken()
 
+    console.log(`API Request: ${options.method || 'GET'} ${url}`)
+    if (token) {
+        console.log(`Using token: ${token.substring(0, 20)}...`)
+    }
+
     const defaultOptions = {
         headers: {
             'Content-Type': 'application/json',
@@ -58,6 +63,8 @@ export const apiRequest = async (endpoint, options = {}) => {
     try {
         const response = await fetch(url, config)
 
+        console.log(`API Response: ${response.status} ${response.statusText}`)
+
         // Handle different response types
         const contentType = response.headers.get('content-type')
         let data
@@ -69,16 +76,21 @@ export const apiRequest = async (endpoint, options = {}) => {
         }
 
         if (!response.ok) {
+            console.error(`API Error Response:`, data)
             // If 401, clear stored token
             if (response.status === 401) {
+                console.log('Clearing stored token due to 401')
                 removeStoredToken()
             }
             throw new Error(data.message || `HTTP error! status: ${response.status}`)
         }
 
+        console.log(`API Success:`, data)
         return { data, response }
     } catch (error) {
         console.error(`API Error (${endpoint}):`, error)
+        console.error(`API Base URL: ${API_BASE_URL}`)
+        console.error(`Full URL: ${url}`)
         throw error
     }
 }
